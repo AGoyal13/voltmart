@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -9,9 +10,9 @@ import { NgForm } from '@angular/forms';
 export class AppComponent {
   isMobileNavOpen = false;
   currentYear = new Date().getFullYear();
-  enquiryData = {
-    role: 'Logistics / fleet operator'
-  };
+  enquiryData = { role: 'Logistics / fleet operator' };
+
+  constructor(private router: Router) {}
 
   toggleMobileNav(): void {
     this.isMobileNavOpen = !this.isMobileNavOpen;
@@ -21,18 +22,35 @@ export class AppComponent {
     this.isMobileNavOpen = false;
   }
 
-  scrollTo(id: string): void {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  /** If already on home, just scroll. If on another route, navigate to home then scroll */
+  scrollToHomeSection(id: string, event?: Event): void {
+    event?.preventDefault();
     this.closeMobileNav();
+
+    if (this.router.url !== '/') {
+      this.router.navigateByUrl('/').then(() => {
+        setTimeout(() => this.scrollTo(id), 0);
+      });
+      return;
+    }
+
+    this.scrollTo(id);
+  }
+
+  goHomeAndScrollTop(event?: Event): void {
+    event?.preventDefault();
+    this.scrollToHomeSection('page-top');
+  }
+
+  private scrollTo(id: string): void {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   onSubmitEnquiry(form: NgForm): void {
     const { name, role, message } = form.value;
+    const waNumber = '919999890245';
 
-    const waNumber = '919999890245'; // no +, WhatsApp prefers countrycode + number
     const text = `New Voltmart enquiry:
       Name: ${name || '-'}
       Profile: ${role || '-'}
