@@ -1,0 +1,144 @@
+<main class="page plp">
+    <section class="plp-hero">
+      <div class="plp-hero-left">
+        <p class="kicker">Models</p>
+        <h1>Explore Voltmart EV models</h1>
+        <p class="plp-sub">
+          Browse models built for high-uptime fleets and gig riders. Tap on enquire button for any model to enquire instantly.
+        </p>
+  
+        <div class="plp-tabs" role="tablist" aria-label="Model type tabs">
+          <button
+            type="button"
+            class="tab"
+            [class.active]="activeType === 'Vegh L25'"
+            (click)="setType('Vegh L25')"
+          >
+          Vegh L25
+          </button>
+  
+          <button
+            type="button"
+            class="tab"
+            [class.active]="activeType === 'Reveal N1'"
+            (click)="setType('Reveal N1')"
+          >
+          Reveal N1
+          </button>
+        </div>
+      </div>
+  
+      <!-- Optional WhatsApp note (kept from your earlier “note” style) -->
+      <div class="enquiry-note card" *ngIf="false">
+        <label for="note" class="note-label">Optional note for WhatsApp enquiry</label>
+        <textarea
+          id="note"
+          [(ngModel)]="enquiryNote"
+          rows="3"
+          class="note-input"
+          placeholder="e.g. Need EMI options, delivery timeline, bulk pricing..."
+        ></textarea>
+      </div>
+    </section>
+  
+    <!-- Render ONLY the active product -->
+    <section class="plp-product" *ngIf="activeProduct as p">
+      <header>
+        <div class="product-head">
+            <div class="product-title">
+                <h2 class="product-name">{{ p.name }}</h2>
+                <p class="product-subtitle">{{ p.subtitle }}</p>
+            </div>
+        
+              <!-- <span class="type-pill">{{ p.type }}</span> -->
+            <button
+                type="button"
+                class="btn wa-btn"
+                (click)="enquireOnWhatsapp(p)"
+            >
+                Enquire on WhatsApp
+            </button>
+        </div>
+        <h3>{{p.price}}</h3>
+        
+      </header>
+  
+      <div class="tag-row" aria-label="Product tags">
+        <span class="tag" *ngFor="let t of p.tags">{{ t }}</span>
+      </div>
+  
+      <!-- n tiles = number of colors (variants) -->
+      <section class="plp-grid" aria-label="Model colors grid">
+        <article class="variant-card card" *ngFor="let v of p.variants">
+          
+  
+          <!-- Carousel per color -->
+          <div
+            class="carousel"
+            (touchstart)="onTouchStart($event, p.id, v.id)"
+            (touchend)="onTouchEnd($event, p.id, v.id, v.images.length)"
+          >
+            <button
+              *ngIf="v.images.length > 1"
+              type="button"
+              class="car-btn prev"
+              (click)="prevImage(p.id, v.id, v.images.length)"
+              aria-label="Previous image"
+            >
+              ‹
+            </button>
+  
+            <div class="car-viewport">
+              <img
+                class="car-img"
+                [src]="v.images[getIndex(p.id, v.id)].src"
+                [alt]="v.images[getIndex(p.id, v.id)].alt"
+                loading="lazy"
+              />
+            </div>
+  
+            <button
+              *ngIf="v.images.length > 1"
+              type="button"
+              class="car-btn next"
+              (click)="nextImage(p.id, v.id, v.images.length)"
+              aria-label="Next image"
+            >
+              ›
+            </button>
+  
+            <div class="car-dots" *ngIf="v.images.length > 1">
+              <button
+                type="button"
+                class="dot"
+                *ngFor="let img of v.images; let di = index"
+                [class.active]="di === getIndex(p.id, v.id)"
+                (click)="setImage(p.id, v.id, di)"
+                [attr.aria-label]="'Go to image ' + (di + 1)"
+              ></button>
+            </div>
+          </div>
+          <div class="variant-top">
+            <div class="variant-label">
+              <span class="variant-name">{{ v.colorName }}</span>
+              <span
+                class="swatch"
+                *ngIf="v.swatch"
+                [style.background]="v.swatch"
+                aria-hidden="true"
+              ></span>
+            </div>
+  
+            <!-- <button
+              type="button"
+              class="btn btn-primary submit-btn"
+              (click)="enquireOnWhatsapp(p, v)"
+            >
+              Enquire on WhatsApp
+            </button> -->
+          </div>
+        </article>
+      </section>
+    </section>
+  </main>
+  
