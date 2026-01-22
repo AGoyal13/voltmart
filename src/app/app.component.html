@@ -23,6 +23,7 @@
       <a href="#workflow" (click)="scrollToHomeSection('workflow', $event)">How It Works</a>
       <a href="#founder" (click)="scrollToHomeSection('founder', $event)">Founder</a>
       <a routerLink="/models" (click)="closeMobileNav()">Products</a>
+      <a href="#" (click)="openLegalModal($event)">Legal</a>
     </nav>
 
     <!-- DESKTOP CTA -->
@@ -73,6 +74,7 @@
     <a href="#workflow" (click)="scrollToHomeSection('workflow', $event)">How It Works</a>
     <a href="#founder" (click)="scrollToHomeSection('founder', $event)">Founder</a>
     <a routerLink="/models" (click)="closeMobileNav()">Products</a>
+    <a href="#" (click)="openLegalModal($event); closeMobileNav()">Legal</a>
 
     <button class="btn btn-primary full-width" type="button" (click)="scrollToHomeSection('contact')">
       Talk to us
@@ -87,5 +89,171 @@
     <div>© {{ currentYear }} Voltmart Auto Pvt. Ltd. All rights reserved.</div>
     <div>Clean, cost-efficient mobility for India’s next billion rides.</div>
     </div>
-  </footer> 
+  </footer>
+  <!-- LEGAL MODAL -->
+  <div
+  *ngIf="isLegalModalOpen"
+  class="legal-modal-backdrop"
+  [class.open]="isLegalModalOpen"
+  (click)="closeLegalModal()"
+  [attr.aria-hidden]="!isLegalModalOpen"
+  ></div>
+
+  <div
+  class="legal-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="legalModalTitle"
+  [class.open]="isLegalModalOpen"
+  (keydown)="onLegalModalKeydown($event)"
+  tabindex="-1"
+  *ngIf="isLegalModalOpen"
+  #legalModalRoot
+  >
+    <div class="legal-modal-panel">
+      <header class="legal-modal-header">
+        <h2 id="legalModalTitle">Legal</h2>
+
+        <!-- close button -->
+        <button
+          class="modal-close"
+          aria-label="Close legal modal"
+          (click)="closeLegalModal()"
+        >
+          ✕
+        </button>
+      </header>
+
+      <section class="legal-modal-body">
+        <!-- MAIN MENU VIEW -->
+        <ng-container *ngIf="legalModalView === 'menu'">
+          <p class="muted">Choose a policy to view</p>
+          <ul class="legal-menu-list" role="list">
+            <li role="listitem">
+              <button (click)="openLegalContent('shipping')" class="link-btn">
+                Shipping, Delivery Terms &amp; Conditions
+              </button>
+            </li>
+            <li role="listitem">
+              <button (click)="openLegalContent('privacy')" class="link-btn">
+                Privacy Policy
+              </button>
+            </li>
+            <li role="listitem">
+              <button (click)="openLegalContent('refund')" class="link-btn">
+                Refund &amp; Cancellation Policy
+              </button>
+            </li>
+          </ul>
+        </ng-container>
+
+        <!-- CONTENT VIEW: user will add HTML inside these containers -->
+        <ng-container *ngIf="legalModalView !== 'menu'">
+          <!-- <div class="legal-content-header">
+            <button class="btn-back" (click)="goBackInLegalModal()" aria-label="Back to legal menu">
+              <strong>← Back</strong>
+            </button>
+            <h3 class="legal-content-title">
+              {{ legalModalViewTitleMap[legalModalView] }}
+            </h3>
+          </div> -->
+
+          <div class="legal-content-body">
+            <ng-container [ngSwitch]="legalModalView">
+              <div *ngSwitchCase="'shipping'">
+                <div class="policy-content">
+                  <p><strong>Voltmart Shipping, Delivery and Terms &amp; Conditions</strong></p>
+                  <div>
+                    <p>
+                      Voltmart Shipping, Delivery, and Terms & Conditions outline the process for electric two-wheeler orders from our South Delhi operations. These terms ensure efficient delivery while aligning with our no-refund policy and focus on gig economy needs.
+                    </p>
+
+                    <h4>Delivery Process</h4>
+                    <p>
+                      Orders are processed within 2 to 3 business days after payment confirmation, with delivery timelines of 2 to 5 days depending on location within Delhi NCR. Customers receive tracking updates via WhatsApp or email; final delivery requires a valid ID and signature. High-value EVs are delivered fully assembled and charged, with handover including a basic usage demo.
+                    </p>
+
+                    <h4>Shipping Costs and Coverage</h4>
+                    <p>
+                      Shipping is free within 10 kms of store; additional charges apply for distances beyond, calculated at checkout based on pin code. Voltmart partners with reliable logistics for secure transport, but risk transfers to the customer upon dispatch. Remote areas may incur extra fees or extended timelines due to road conditions.
+                    </p>
+
+                    <h4>Terms and Conditions</h4>
+                    <p>
+                      All sales are final with no cancellations post-confirmation, as per our refund policy. Customers must inspect vehicles at delivery and report issues immediately; unboxing videos are recommended. Voltmart disclaims liability for delays from weather, third-party logistics, or force majeure events. Governing law is Indian, with disputes resolved in Delhi courts.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngSwitchCase="'privacy'">
+                <div class="policy-content">
+                  <p><strong>Voltmart Privacy Policy</strong></p>
+                  <div>
+                    <p>
+                      Voltmart Privacy Policy outlines how personal information is handled to protect customer data while supporting electric vehicle sales. This policy complies with applicable Indian laws, including the Digital Personal Data Protection Act, 2023 (DPDP Act), ensuring transparency in data practices for our e-mobility retail operations.
+                    </p>
+
+                    <h4>Information Collected</h4>
+                    <p>
+                      Voltmart collects personal data such as name, email, phone number, address, and payment details during purchases, inquiries, or website interactions. Device information like IP address and browsing history may also be gathered via cookies to improve user experience. No sensitive data like biometric or health information is collected unless voluntarily provided for service purposes.
+                    </p>
+
+                    <h4>How Data Is Used</h4>
+                    <p>
+                      Data enables order processing, delivery coordination, customer support, and marketing communications for electric two-wheelers. It supports business operations like inventory management and partnerships in the gig economy. Usage aligns with legitimate interests, contractual needs, or explicit consent, without selling data to unrelated third parties.
+                    </p>
+                    
+                    <h4>Data Sharing Practices</h4>
+                    <p>
+                      Information is shared only with service providers for logistics, payments, or warranty services (e.g., fintech partners or battery suppliers). No sharing occurs with unrelated entities, and international transfers include safeguards. Legal disclosures may happen if required by authorities.
+                    </p>
+
+                    <h4>
+                      Security Measures
+                    </h4>
+                    <p>
+                      Robust encryption, access controls, and regular audits protect data from unauthorized access or breaches. Voltmart reviews security periodically, especially for high-value EV transactions. Customers must safeguard their login credentials.
+                    </p>
+
+                    <h4>User Rights and Contact</h4>
+                    <p>
+                      Users can access, correct, or delete their data by emailing info@voltmart.co.in. Opt out of marketing anytime. Data retention lasts as long as needed for business or legal purposes, typically the post-purchase warranty period. Policy updates will be posted on the site.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngSwitchCase="'refund'">
+                <!-- Add your Refund & Cancellation Policy HTML here -->
+                <div class="policy-content">
+                  <p><strong>Voltmart Refund &amp; Cancellation Policy</strong></p>
+                  <div>
+                    <p>
+                      Voltmart maintains a strict no-refund and no-return policy to ensure operational efficiency in electric vehicle sales. All purchases are final upon confirmation, with no exceptions for cancellations or refunds.
+                    </p>
+
+                    <h4>No Refunds Issued</h4>
+                    <p>
+                      Once payment is processed and the order is confirmed, Voltmart does not provide refunds under any circumstances, including change of mind or delivery delays. Customers are encouraged to review all product specifications, pricing, and delivery details thoroughly before completing the purchase. This policy supports Voltmart's commitment to sustainable e-mobility solutions without the overhead of return logistics.
+                    </p>
+
+                    <h4>No Returns or Exchanges</h4>
+                    <p>
+                      Returns, exchanges, or replacements are not accepted for any reason. Products such as electric two-wheelers are custom-configured or high-value items, making returns impractical. In the rare event that a manufacturing defect is reported within the warranty period, don't hesitate to get in touch with customer support for service options. However, this does not constitute a return. Verify vehicle features and compatibility at the point of sale to avoid issues.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </section>
+
+      <footer class="legal-modal-footer">
+        <button *ngIf="legalModalView !== 'menu'" class="btn btn-outline green-c" (click)="goBackInLegalModal()" aria-label="Back to legal menu">Back</button>
+        <button class="btn btn-outline" (click)="closeLegalModal()">Close</button>
+      </footer>
+    </div>
+  </div>
 </main>
