@@ -761,6 +761,7 @@
   border: none;
   font-size: 1.1rem;
   cursor: pointer;
+  color: black;
 }
 
 /* body */
@@ -791,6 +792,7 @@
   border: 1px solid rgba(148, 163, 184, 0.25);
   cursor: pointer;
   font-size: 0.95rem;
+  color: black;
 }
 .link-btn:hover {
   background: #fff;
@@ -829,7 +831,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.6rem;
-  margin-top: 0.6rem;
+  margin-top: 0;
 }
 
 /* responsive smaller screens */
